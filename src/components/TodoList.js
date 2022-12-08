@@ -3,8 +3,31 @@ import TodoForm from './TodoForm';
 import Todo from './Todo';
 
 const TodoList = () => {
-  const [toDosList, setToDosList] = useState([]);
+  const [toDosList, setToDosList] = useState([
+    {
+      id: Math.round(Math.random() * 10000),
+      isCompleted: false,
+      title: 'Enjoy',
+      isBeingEdited: false,
+      date: `DD.MM.YYYY | HH:MM:SS`,
+    },
+    {
+      id: Math.round(Math.random() * 10000),
+      isCompleted: false,
+      title: 'Bake pizza',
+      isBeingEdited: false,
+      date: `DD.MM.YYYY | HH:MM:SS`,
+    },
+    {
+      id: Math.round(Math.random() * 10000),
+      isCompleted: false,
+      title: 'Buy ingredients for pizza',
+      isBeingEdited: false,
+      date: `DD.MM.YYYY | HH:MM:SS`,
+    },
+  ]);
 
+  // Adds new todo to list and also checks if entered text has many spaces
   const addNewTodo = todo => {
     if (!todo.title || /^\s*$/.test(todo.title)) return;
 
@@ -12,36 +35,47 @@ const TodoList = () => {
     setToDosList(() => newToDosList);
   };
 
-  const toggleComplete = id => {
-    const filteredToDosList = toDosList.map(todo =>
-      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+  // Toggles isComplete property of todo
+  const toggleComplete = id =>
+    setToDosList(prevList =>
+      prevList.map(todo =>
+        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      )
     );
 
-    setToDosList(() => filteredToDosList);
-  };
-
-  const editToDo = ({ id, title, isCompleted }) => {
-    const modifiedToDosList = toDosList.map(todo =>
-      todo.id === id ? { ...todo, title, isCompleted } : todo
+  // Toggles isBeingEdited property of todo
+  const toggleEditToDo = ({ id, title, isBeingEdited }) =>
+    setToDosList(prevList =>
+      prevList.map(todo =>
+        todo.id === id
+          ? { ...todo, title, isBeingEdited: !isBeingEdited }
+          : { ...todo, isBeingEdited: false }
+      )
     );
 
-    setToDosList(() => modifiedToDosList);
-  };
+  // Confirms changes to todo
+  const confirmToDoChange = (id, title) =>
+    setToDosList(prevList =>
+      prevList.map(todo =>
+        todo.id === id
+          ? { ...todo, title, isBeingEdited: !todo.isBeingEdited }
+          : todo
+      )
+    );
 
-  const removeToDo = id => {
-    const filteredToDosList = toDosList.filter(todo => todo.id !== id);
-
-    setToDosList(() => filteredToDosList);
-  };
+  // Deletes todo
+  const removeToDo = id =>
+    setToDosList(prevList => prevList.filter(todo => todo.id !== id));
 
   return (
-    <div>
-      <h1>What is a planfor today?</h1>
+    <div className="container">
+      <h1>What is your plan for today?</h1>
       <TodoForm addNewTodo={addNewTodo} />
       <Todo
         toDosList={toDosList}
         removeToDo={removeToDo}
-        editToDo={editToDo}
+        toggleEditToDo={toggleEditToDo}
+        confirmToDoChange={confirmToDoChange}
         toggleComplete={toggleComplete}
       />
     </div>

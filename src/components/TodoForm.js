@@ -17,6 +17,7 @@ const TodoForm = props => {
       id: Math.round(Math.random() * 10000),
       isCompleted: false,
       title: input,
+      isBeingEdited: false,
       date: `${date.toLocaleDateString()} | ${date.toLocaleTimeString()}`,
     });
 
@@ -26,6 +27,7 @@ const TodoForm = props => {
   return (
     <form className="todo-form" onSubmit={handleSubmit}>
       <input
+        className="todo-input"
         name="text"
         placeholder="Add your todo"
         value={input}
