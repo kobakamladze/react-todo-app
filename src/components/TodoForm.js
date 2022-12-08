@@ -13,8 +13,9 @@ const TodoForm = props => {
 
     const date = new Date();
 
-    props.onNewToDoAdd({
+    props.addNewTodo({
       id: Math.round(Math.random() * 10000),
+      isCompleted: false,
       title: input,
       date: `${date.toLocaleDateString()} | ${date.toLocaleTimeString()}`,
     });
